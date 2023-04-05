@@ -27,3 +27,20 @@ func NoteCreate(name string, content string) *Note {
 	database.Database.Create(&entry)
 	return &entry
 }
+
+func NotesFind(id uint64) *Note {
+	var note Note
+	database.Database.Where("id = ?", id).First(&note)
+	return &note
+}
+
+func (note *Note) Update(name string, content string) {
+	note.Name = name
+	note.Content = content
+	database.Database.Save(&note)
+}
+
+func NotesMarkDelete(id uint64) {
+	// Update notes set deleted_at==Current Time> WHERE id = <id>
+	database.Database.Where("id = ?", id).Delete(&Note{})
+}

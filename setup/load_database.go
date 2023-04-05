@@ -1,4 +1,4 @@
-package helpers
+package setup
 
 import (
 	"gin_notes/database"
@@ -7,6 +7,6 @@ import (
 
 func LoadDatabase() {
 	database.Connect()
-	//database.Database.AutoMigrate(&model.User{})
+	database.Database.AutoMigrate(&models.User{})
 	database.Database.AutoMigrate(&models.Note{})
 }
