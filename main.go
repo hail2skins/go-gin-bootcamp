@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"gin_notes/controllers"
+	"gin_notes/helpers"
 	"gin_notes/middlewares"
 	"gin_notes/setup"
 	"log"
@@ -33,18 +34,22 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "home/index.html", gin.H{
 			"title":     "Notes Application",
-			"logged_in": (c.GetUint64("user_id") > 0),
+			"logged_in": helpers.IsUserLoggedIn(c),
 		})
 		fmt.Println(c.GetUint64("user_id"))
 	})
 
-	r.GET("/notes", controllers.NotesIndex)
-	r.GET("notes/new", controllers.NotesNew)
-	r.POST("/notes", controllers.NotesCreate)
-	r.GET("/notes/:id", controllers.NotesShow)
-	r.GET("/notes/edit/:id", controllers.NotesEditPage)
-	r.POST("/notes/:id", controllers.NotesUpdate)
-	r.DELETE("/notes/:id", controllers.NotesDelete)
+	// Route Group - /notes
+	notes := r.Group("/notes")
+	{
+		notes.GET("/", controllers.NotesIndex)
+		notes.GET("/new", controllers.NotesNew)
+		notes.POST("/", controllers.NotesCreate)
+		notes.GET("/:id", controllers.NotesShow)
+		notes.GET("/edit/:id", controllers.NotesEditPage)
+		notes.POST("/:id", controllers.NotesUpdate)
+		notes.DELETE("/:id", controllers.NotesDelete)
+	}
 
 	r.GET("/login", controllers.LoginPage)
 	r.GET("/signup", controllers.SignupPage)

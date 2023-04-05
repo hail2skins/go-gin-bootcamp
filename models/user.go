@@ -10,7 +10,6 @@ type User struct {
 	ID        uint64    `gorm:"primary_key;auto_increment" json:"id"`
 	Username  string    `gorm:"size:64;not null;unique" json:"username"`
 	Password  string    `gorm:"size:255;not null;" json:""`
-	Notes     []Note    `gorm:"foreignKey:UserID" json:"notes"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
